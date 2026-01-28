@@ -1,0 +1,117 @@
+import flet as ft
+from auth import login, signup
+from chat_screen import chat_screen
+
+def main(page: ft.Page):
+    page.title = "ARV-GPT"
+    page.theme_mode = ft.ThemeMode.SYSTEM
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.theme = ft.Theme(color_scheme_seed=ft.Colors.BLUE)
+    page.dark_theme = ft.Theme(color_scheme_seed=ft.Colors.BLUE)
+    user_token = None  # Store user session token
+    
+    def show_login_ui(event = None):
+        page.clean()
+
+        username_field = ft.TextField(label="Username", width=300, border_radius=10)
+        password_field = ft.TextField(label="Password", password=True, width=300, border_radius=10)
+        message_text = ft.Text(color="red")
+        login_img = ft.Image(
+        src=f"/images/welcome.png",
+        width=200,
+        height=200,
+        fit=ft.ImageFit.CONTAIN,
+        )
+
+        def handle_login(e):
+            nonlocal user_token
+            res = login(username_field.value.strip(), password_field.value.strip())
+            if "token" in res:
+                user_token = res["token"]
+                page.session.set("user_token", user_token)
+                page.session.set("language", "en") 
+                page.views.clear()  # Clear existing UI
+                page.views.append(chat_screen(page))  # Navigate to chat screen
+                page.update()
+            else:
+                message_text.value = "Login failed"
+                page.update()
+
+        def switch_to_signup():
+            show_signup_ui(event = None)
+
+        login_button = ft.ElevatedButton("Login", on_click=handle_login)
+        signup_button = ft.TextButton("Create an account", on_click=switch_to_signup)
+
+        login_container = ft.Container(
+            content=ft.Column(
+                [
+                    login_img,
+                    ft.Text("Login", size=24, weight="bold"),
+                    username_field,
+                    password_field,
+                    login_button,
+                    signup_button,
+                    message_text,
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
+            alignment=ft.alignment.center,
+            padding=20,
+        )
+
+        page.add(login_container)
+
+    def show_signup_ui():
+        page.clean()
+        
+        signup_img = ft.Image(
+        src=f"/images/auth.png",
+        width=200,
+        height=200,
+        fit=ft.ImageFit.CONTAIN,
+        )
+        new_username = ft.TextField(label="Username", width=300, border_radius=10)
+        new_email = ft.TextField(label="Email", width=300, border_radius=10)
+        new_password = ft.TextField(label="Password", password=True, width=300, border_radius=10)
+        signup_message = ft.Text(color="red")
+
+        def handle_signup(e):
+            res = signup(new_username.value, new_email.value, new_password.value)
+            if "message" in res:
+                signup_message.value = "Signup successful! Please log in."
+                page.update()
+                show_login_ui()
+            else:
+                signup_message.value = "Signup failed"
+                page.update()
+
+        back_to_login = ft.TextButton("Back to Login", on_click=show_login_ui)
+        signup_button = ft.ElevatedButton("Sign Up", on_click=handle_signup)
+
+        signup_container = ft.Container(
+            content=ft.Column(
+                [
+                    signup_img,
+                    ft.Text("Sign Up", size=24, weight="bold"),
+                    new_username,
+                    new_email,
+                    new_password,
+                    signup_button,
+                    back_to_login,
+                    signup_message,
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
+            alignment=ft.alignment.center,
+            padding=20,
+        )
+
+        page.add(signup_container)
+
+    show_login_ui()
+    
+if __name__ == "__main__":
+    ft.app(target=main,assets_dir="assets")
+
+

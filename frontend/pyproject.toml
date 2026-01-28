@@ -1,0 +1,48 @@
+[project]
+name = "frontend"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [ "flet-audio", "flet==0.27.6", "gtts (>=2.5.4,<3.0.0)", "flet-audio-recorder (>=0.1.0,<0.2.0)" ]
+
+
+[project.flutter]
+dependencies = [ "flet_audio" ]
+
+
+[[project.authors]]
+name = "Flet developer"
+email = "you@example.com"
+
+
+[tool.flet]
+org = "com.mycompany"
+product = "frontend"
+company = "Flet"
+copyright = "Copyright (C) 2025 by Flet"
+
+
+[tool.flet.app]
+module = "main"
+path = "src"
+exclude = [ "assets" ]
+
+
+[tool.flet.splash]
+web = false
+ios = false
+android = false
+
+
+[tool.uv]
+dev-dependencies = [ "flet[all]==0.27.6" ]
+
+
+[tool.poetry]
+package-mode = false
+
+
+[tool.poetry.group.dev.dependencies.flet]
+extras = [ "all" ]
+version = "0.27.6"
