@@ -17,8 +17,11 @@ from .models import Message
 from .serializers import MessageSerializer, UserSerializer
 from .translation import  translate_to_tamil,clean_text
 import json
+from dotenv import load_dotenv
 
-GROQ_API_KEY = "REMOVED"
+load_dotenv()
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/v1/chat/completions"
 
 
