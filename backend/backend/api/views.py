@@ -102,7 +102,7 @@ def chat_with_ai(request):
                     user query : {user_message}
                 """
 
-    client = Groq(api_key="REMOVED")
+    client = Groq(api_key=GROQ_API_KEY)
                 #    8. ** you want give response only in the format of json**
                 #     output format : {{"response":"your-full-response","hastag":"get-important-keywords"}}
     try:
