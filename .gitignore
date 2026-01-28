@@ -177,3 +177,5 @@ CD
 
 # Environment variables file
 .env 
+
+.vscode/P
