@@ -8,4 +8,3 @@ urlpatterns = [
     path("login/", login),
     path("chat_ai/", chat_with_ai),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
- 
